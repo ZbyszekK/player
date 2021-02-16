@@ -1,8 +1,5 @@
 #include <gst/gst.h>
 
-#define DASH "https://dash.akamaized.net/dash264/TestCases/2a/qualcomm/2/MultiRes.mpd"
-
-
 typedef struct bus_watch_context {
     GstElement* pipeline;
     GMainLoop* loop;
@@ -51,6 +48,11 @@ static gboolean callback(GstBus* bus, GstMessage* message, void* context)
 
 int main(int argc, char *argv[])
 {
+    if (argc <2) {
+        g_print("Usage: %s [STREAM_URL]\n", argv[0]);
+        return -1;
+    }
+
     // initialize gstreamer
     gst_init(&argc, &argv);
 
@@ -67,7 +69,7 @@ int main(int argc, char *argv[])
     }
 
     // set content uri
-    g_object_set(pipeline, "uri", DASH, NULL);
+    g_object_set(pipeline, "uri", argv[1], NULL);
 
     // create main gstreamer loop
     GMainLoop* loop = g_main_loop_new(NULL, FALSE);
